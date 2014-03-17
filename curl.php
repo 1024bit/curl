@@ -13,57 +13,57 @@
  * @Return array
  */
 function curl($url, $data = null, $headers = array(), $setheader = FALSE, $setcookie = FALSE, $withcookie = TRUE, $cookiedomain) {
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url);
-		
-	curl_setopt($ch, CURLOPT_HEADER, TRUE);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+        
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
 
-	// curl_setopt($ch, CURLOPT_VERBOSE, TRUE);
-	// $curl_debug_file = __DIR__.DIRECTORY_SEPARATOR.'curl.log';
-	// $fh = fopen($curl_debug_file, "w+");
-	// curl_setopt($ch, CURLOPT_STDERR, $fh);    
+    // curl_setopt($ch, CURLOPT_VERBOSE, TRUE);
+    // $curl_debug_file = __DIR__.DIRECTORY_SEPARATOR.'curl.log';
+    // $fh = fopen($curl_debug_file, "w+");
+    // curl_setopt($ch, CURLOPT_STDERR, $fh);    
     
-	if ($withcookie) {
-		array_push($headers, 'Cookie: '.str_cookie());
-	}
-	// Resolve two http response status code problem
-	array_push($headers, 'Expect:');
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-	
-	if (!empty($data)){
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	}
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	// Timeout (seconds)
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
-	$out = curl_exec($ch);
+    if ($withcookie) {
+        array_push($headers, 'Cookie: '.str_cookie());
+    }
+    // Resolve two http response status code problem
+    array_push($headers, 'Expect:');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    
+    if (!empty($data)){
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    }
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    // Timeout (seconds)
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+    $out = curl_exec($ch);
 
-	$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	list($headers, $body) = explode("\r\n\r\n", $out, 2);
+    $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    list($headers, $body) = explode("\r\n\r\n", $out, 2);
 
-	preg_match('|^HTTP\/1.+\\n|', $headers, $status_text);
-	$status_text = $status_text[0];
-	preg_match_all('|(.+?): (.+?)\\n|', $out, $matches);  
-	$headers = array();
-	$headers['Set-Cookie'] = array();
-	
-	// Extract cookies from the headers
+    preg_match('|^HTTP\/1.+\\n|', $headers, $status_text);
+    $status_text = $status_text[0];
+    preg_match_all('|(.+?): (.+?)\\n|', $out, $matches);  
+    $headers = array();
+    $headers['Set-Cookie'] = array();
+    
+    // Extract cookies from the headers
     foreach ($matches[1] as $key => $val) {
-		if ($val !== 'Set-Cookie') {
-			$headers[$val] = $matches[2][$key];
-		} else {
-			array_push($headers['Set-Cookie'], $matches[2][$key]);
-		}
-	}
-	
-	curl_close($ch);
+        if ($val !== 'Set-Cookie') {
+            $headers[$val] = $matches[2][$key];
+        } else {
+            array_push($headers['Set-Cookie'], $matches[2][$key]);
+        }
+    }
+    
+    curl_close($ch);
     
     // HTTP status
     header($status_text);
     
-	if ($setcookie) {
+    if ($setcookie) {
         foreach ($headers['Set-Cookie'] as $cookie) {
             $tmp = explode('; ', $cookie, 2);
             $keyval = explode('=', $tmp[0]);
@@ -93,15 +93,15 @@ function curl($url, $data = null, $headers = array(), $setheader = FALSE, $setco
             }        
         }        
     }
-    	
-	return array('cookies' => $_COOKIE, 'status' => array('status_code' => $status_code, 'status_text' => $status_text), 'headers' => $headers, 'body' => $body, 'response' => $out);
+        
+    return array('cookies' => $_COOKIE, 'status' => array('status_code' => $status_code, 'status_text' => $status_text), 'headers' => $headers, 'body' => $body, 'response' => $out);
 }
 // String $_COOKIE
 function str_cookie() {
-	$ckstr = '';
-	foreach ($_COOKIE as $key => $val) {
-		$ckstr .= $key.'='.urlencode($val).'; ';
-	}
-	return substr($ckstr, 0, -2);
+    $ckstr = '';
+    foreach ($_COOKIE as $key => $val) {
+        $ckstr .= $key.'='.urlencode($val).'; ';
+    }
+    return substr($ckstr, 0, -2);
 }
 ?>
