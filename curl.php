@@ -6,7 +6,7 @@
  * @Param data          array/string        post data
  * @Param headers       array               set http request header
  * @Param setheader     boolean             set http response header or not
- * @Param setcookie     boolean             set cookies or not
+ * @Param setcookie     boolean             set http response cookies or not
  * @Param withcookie    boolean             request with cookie or not, if true, then setcookie must be true
  * @Param cookiedomain  string              change the cookie's domain manually
  *
