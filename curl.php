@@ -2,15 +2,15 @@
 /** 
  * Emulate the browser's behavior to request url
  *   
- * @Param url           string              target url
- * @Param data          array/string        post data
- * @Param headers       array               set http request header
- * @Param setheader     boolean             set http response header or not
- * @Param setcookie     boolean             set http response cookies or not
- * @Param withcookie    boolean             request with cookie or not, if true, then setcookie must be true
- * @Param cookiedomain  string              change the cookie's domain manually
+ * @param url           {string}              target url
+ * @param data          {array/string}        post data
+ * @param headers       {array}               set http request header
+ * @param setheader     {boolean}             set http response header or not
+ * @param setcookie     {boolean}             set http response cookies or not
+ * @param withcookie    {boolean}             request with cookie or not, if true, then setcookie must be true
+ * @param cookiedomain  {string}              change the cookie's domain manually
  *
- * @Return array
+ * @return array
  */
 function curl($url, $data = null, $headers = array(), $setheader = FALSE, $setcookie = FALSE, $withcookie = TRUE, $cookiedomain) {
     $ch = curl_init();
