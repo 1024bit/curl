@@ -11,7 +11,7 @@
  * @param cookiedomain  {String}              change the cookie's domain manually
  *
  * @return {Array}
- **/
+ */
 function curl($url, $data = null, $headers = array(), $setheader = FALSE, $setcookie = FALSE, $withcookie = TRUE, $cookiedomain) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
